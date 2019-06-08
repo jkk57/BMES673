@@ -1,6 +1,5 @@
 function dY = diff_DSB(T,Y)
 
-% Table 1 Values for [V79 HF19 T98G] cells
 alpha= [16 25 25];
 k3= [0.5 0.5 0.5];
 kp1= [10 10 10];
@@ -11,7 +10,12 @@ kDg= [2 2 0.75];
 kM= [0.5 0.5 0.5];
 kres= [0.05 0.05 0.05];
 H= 3000;
-h= [c1/H (c1+c2)/H (c1+c2p+c2pp+c3)/H];
+
+
+C= [c0 c1 c2 c2p c2pp c3];
+C(1)=0;
+
+h= [c1/H, (c1+c2)/H, (c1+c2p+c2pp+c3)/H];
 
 v1in= alpha/H1 - k1*c0*(1-h(1));
 v1out= k1*c0*(1-h(1));
