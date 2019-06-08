@@ -25,7 +25,8 @@ v5out= k3*c2pp*(1-h(3));
 v6in= kres*c2p;
 v7in= k3*c2pp*(1-h(3));
 v7out= kDc*c3;
-
+v8in= (kPg*cDNAPKcs*(1-gamma))/(kM + cDNAPKcs);
+v8out= (kDg*gamma);
 
 dc0= v1in - v1out;
 dc1= v2in - v2out;
@@ -34,5 +35,6 @@ dc2p= v4in - v4out;
 dc2pp= v5in - v5out;
 dcres= v6in;
 dc3= v7in - v7out;
+dgamma= v8in - v8out;
 
-dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3]';
+dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]';
