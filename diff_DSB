@@ -11,11 +11,7 @@ kM= [0.5 0.5 0.5];
 kres= [0.05 0.05 0.05];
 H= 3000;
 
-
-C= [c0 c1 c2 c2p c2pp c3];
-C(1)=0;
-
-h= [c1/H, (c1+c2)/H, (c1+c2p+c2pp+c3)/H];
+h= [c1/H, (c1+c2)/H, (c1+c2p+c2pp+c3)/H]; %needsfixing_idk why error
 
 v1in= alpha/H1 - k1*c0*(1-h(1));
 v1out= k1*c0*(1-h(1));
