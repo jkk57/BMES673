@@ -1,0 +1,36 @@
+function dY = diff_DSB(T,Y)
+
+alpha= [16 25 25];
+k3= [8 8 8];
+kp1= [10 10 10];
+kp2= [10 10 10];
+kPg= [1000 900 1000];
+kDc= [4 4 2];
+kDg= [2 2 0.75];
+kM= [0.5 0.5 0.5];
+kres= [0 0 0];
+
+v1in= alpha/H1 - k1*c0*(1-h(1));
+v1out= k1*c0*(1-h(1));
+v2in= k1*c0*(1-h(1));
+v2out= k2*c1*(1-h(2));
+v3in= k2*c1*(1-h(2));
+v3out= kp1*c2;
+v4in= kp1*c2;
+v4out= (kp2+kres)*c2p;
+v5in= kp2*c2p;
+v5out= k3*c2pp*(1-h(3));
+v6in= kres*c2p;
+v7in= k3*c2pp*(1-h(3));
+v7out= kDc*c3;
+
+
+dc0= v1in - v1out;
+dc1= v2in - v2out;
+dc2= v3in - v3out;
+dc2p= v4in - v4out;
+dc2pp= v5in - v5out;
+dcres= v6in;
+dc3= v7in - v7out;
+
+dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3]';
