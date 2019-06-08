@@ -1,16 +1,17 @@
 function dY = diff_DSB(T,Y)
 
+% Table 1 Values for [V79 HF19 T98G] cells
 alpha= [16 25 25];
-k3= [8 8 8];
+k3= [0.5 0.5 0.5];
 kp1= [10 10 10];
-kp2= [10 10 10];
+kp2= [0.5 0.5 0.5];
 kPg= [1000 900 1000];
 kDc= [4 4 2];
 kDg= [2 2 0.75];
 kM= [0.5 0.5 0.5];
-kres= [0 0 0];
-
-h= [c1 c1+c2 c1+c2p+c2pp+c3];
+kres= [0.05 0.05 0.05];
+H= 3000;
+h= [c1/H (c1+c2)/H (c1+c2p+c2pp+c3)/H];
 
 v1in= alpha/H1 - k1*c0*(1-h(1));
 v1out= k1*c0*(1-h(1));
@@ -28,6 +29,7 @@ v7out= kDc*c3;
 v8in= (kPg*cDNAPKcs*(1-gamma))/(kM + cDNAPKcs);
 v8out= (kDg*gamma);
 
+
 dc0= v1in - v1out;
 dc1= v2in - v2out;
 dc2= v3in - v3out;
@@ -35,6 +37,5 @@ dc2p= v4in - v4out;
 dc2pp= v5in - v5out;
 dcres= v6in;
 dc3= v7in - v7out;
-dgamma= v8in - v8out;
 
-dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]';
+dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3]';
