@@ -1,6 +1,6 @@
 function dY = diff_DSB(T,Y)
 
-alpha= [16 25 25];
+alpha= [ 16 25 25];
 k3= [0.5 0.5 0.5];
 kp1= [10 10 10];
 kp2= [0.5 0.5 0.5];
@@ -9,25 +9,32 @@ kDc= [4 4 2];
 kDg= [2 2 0.75];
 kM= [0.5 0.5 0.5];
 kres= [0.05 0.05 0.05];
-H= 3000;
+H1= 3000;
+H2= H1- c1;
+H3= H2- c2;
+k1= 100; 
+k2= 100;
+littleh1= (c1 + c2+ c2p+ c2pp + c3)/H1;
+littleh2= (c2+ c2p + c2pp + c3)/H2;
+littleh3= c3/H3;
 
-h= [c1/H, (c1+c2)/H, (c1+c2p+c2pp+c3)/H]; %needsfixing_idk why error
 
-v1in= alpha/H1 - k1*c0*(1-h(1));
-v1out= k1*c0*(1-h(1));
-v2in= k1*c0*(1-h(1));
-v2out= k2*c1*(1-h(2));
-v3in= k2*c1*(1-h(2));
+
+v1in= alpha/H1;
+v1out= k1*c0*(1-littleh1);
+v2in= k1*c0*(1-littleh1);
+v2out= k2*c1*(1-littleh2);
+v3in= k2*c1*(1-littleh2);
 v3out= kp1*c2;
 v4in= kp1*c2;
 v4out= (kp2+kres)*c2p;
 v5in= kp2*c2p;
-v5out= k3*c2pp*(1-h(3));
+v5out= k3*c2pp*(1-littleh3);
 v6in= kres*c2p;
-v7in= k3*c2pp*(1-h(3));
+v7in= k3*c2pp*(1-littleh3);
 v7out= kDc*c3;
-v8in= (kPg*cDNAPKcs*(1-gamma))/(kM + cDNAPKcs);
-v8out= (kDg*gamma);
+v8in= (kPg*(c2p+c2pp+c3)*(1-gamma))/(kM + (c2p+ c2pp+c3));
+v8out= (kDg*gamma) ;
 
 
 dc0= v1in - v1out;
