@@ -1,0 +1,7 @@
+[c0 c1 c2 c2p c2pp c3 gamma ]
+[T,Y]= ode45(@diff_DSB, [0 10], [25 2.5 0 0 0 0 0]);
+
+plot(T, Y(:,1), T, Y(:,2), T, Y(:,3), T, Y(:,4), T, Y(:,5), T, Y(:,6), T, Y(:,7));
+xlabel('time (sec)');
+ylabel('concentration');
+legend({'c0', 'c1', 'c2', 'c2p', 'c2pp','c3', 'gamma'});
