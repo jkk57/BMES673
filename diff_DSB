@@ -1,48 +1,55 @@
 function dY = diff_DSB(T,Y)
+% Y= [c0 c1 c2 c2p c2pp cres c3 gamma ]
+% Y values
+%% [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]
 
-alpha= [ 16 25 25];
-k3= [0.5 0.5 0.5];
-kp1= [10 10 10];
-kp2= [0.5 0.5 0.5];
-kPg= [1000 900 1000];
-kDc= [4 4 2];
-kDg= [2 2 0.75];
-kM= [0.5 0.5 0.5];
-kres= [0.05 0.05 0.05];
-H1= 3000;
-H2= H1- c1;
-H3= H2- c2;
+% Y= [c0 c1 c2 c2p c2pp c3 cres gamma]
+
+
+dDdt= 1;
+
+alpha= 16;
 k1= 100; 
 k2= 100;
-littleh1= (c1 + c2+ c2p+ c2pp + c3)/H1;
-littleh2= (c2+ c2p + c2pp + c3)/H2;
-littleh3= c3/H3;
+k3= 8;
+kp1= 10;
+kp2= 10;
+kPg= 1000;
+kDc= 4;
+kDg= 2;
+kM= 0.5;
+kres= 0; %simple DSB
+H1= 3000; %found from 
 
 
+%% 
 
-v1in= alpha/H1;
-v1out= k1*c0*(1-littleh1);
-v2in= k1*c0*(1-littleh1);
-v2out= k2*c1*(1-littleh2);
-v3in= k2*c1*(1-littleh2);
-v3out= kp1*c2;
-v4in= kp1*c2;
-v4out= (kp2+kres)*c2p;
-v5in= kp2*c2p;
-v5out= k3*c2pp*(1-littleh3);
-v6in= kres*c2p;
-v7in= k3*c2pp*(1-littleh3);
-v7out= kDc*c3;
-v8in= (kPg*(c2p+c2pp+c3)*(1-gamma))/(kM + (c2p+ c2pp+c3));
-v8out= (kDg*gamma) ;
+c0= Y(1); %c0
+c1= Y(2);
+c2= Y(3); 
+c2p= Y(4);
+c2pp= Y(5);
+cres= Y(6);
+c3= Y(7);
+gamma= Y(8);
+%%
+
+h1= (c0 + c1)/H1;
+h2= (c0 + c1 + c2 + c2p + c2pp)/H1;
+h3= (c0 + c1 + c2 + c2p + c2pp+ c3)/H1;
 
 
-dc0= v1in - v1out;
-dc1= v2in - v2out;
-dc2= v3in - v3out;
-dc2p= v4in - v4out;
-dc2pp= v5in - v5out;
-dcres= v6in;
-dc3= v7in - v7out;
+%% reaction rates
 
-dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3]';
+
+dc0= ((alpha/H1)*dDdt) - (k1*c0*(1-h1));
+dc1= k1*c0*(1-h1) - k2*c1*(1-h2);
+dc2= k2*c1*(1-h2)- kp1*c2;
+dc2p= kp1*c2 - (kp2 + kres)*c2p;
+dc2pp= kp2*c2p - k3*c2pp*(1-h3);
+dcres= kres*c2p;
+dc3= k3*c2pp*(1-h3) - kDc*c3;
+dgamma= (kPg*(c2p + c2pp + c3)*(1-gamma))/(kM + (c2p + c2pp + c3))- (kDg*gamma);
+
+
+dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]';
