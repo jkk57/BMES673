@@ -1,55 +1,48 @@
-function dY = diff_DSB(T,Y)
-% Y= [c0 c1 c2 c2p c2pp cres c3 gamma ]
-% Y values
-%% [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]
+%% for simple DSBs- V79 HF19 T98G
 
-% Y= [c0 c1 c2 c2p c2pp c3 cres gamma]
-
-
-dDdt= 1;
-
-alpha= 16;
-k1= 100; 
+function dY= DSBsim(T, Y)
+% parameters from Table 1
+alpha= 16; 
+k1= 100;
 k2= 100;
 k3= 8;
+H1= 3000;
 kp1= 10;
 kp2= 10;
-kPg= 1000;
-kDc= 4;
-kDg= 2;
-kM= 0.5;
-kres= 0; %simple DSB
-H1= 3000; %found from 
+kpg= 1000;
+kdc= 4;
+kdg= 2;
+km= 0.5;
+kres= 0; %simple 
+dDdt= 1;
 
+%% variables in relation to y
 
-%% 
-
-c0= Y(1); %c0
+c0= Y(1);
 c1= Y(2);
-c2= Y(3); 
+c2= Y(3);
 c2p= Y(4);
 c2pp= Y(5);
-cres= Y(6);
-c3= Y(7);
+c3= Y(6);
+cres= Y(7);
 gamma= Y(8);
-%%
 
-h1= (c0 + c1)/H1;
-h2= (c0 + c1 + c2 + c2p + c2pp)/H1;
-h3= (c0 + c1 + c2 + c2p + c2pp+ c3)/H1;
+%% little h's
+h1= (c1 + c2 + c2p + c2pp + c3)/H1;
+h2= (c2  + c2p + c2pp + c3)/H1;
+h3= (c3)/H1;
+
+%% differential equations
+
+dc0 = (alpha/H1)*dDdt - k1*(c0/H1)*(1-h1);
+dc1= (k1*(c0/H1)*(1-h1)) - (k2*(c1/H1)*(1-h2));
+dc2= (k2*(c1/H1)*(1-h2)) - kp1*(c2/H1);
+dc2p= (kp1*(c2/H1))- (kp2 + kres)*(c2p/H1);
+dc2pp= (kp2*(c2p/H1)) - (k3*(c2pp/H1)*(1-h3));
+
+dc3= k3*(c2pp/H1)*(1-h3)- kdc*(c3/H1);
+dcres= kres*(c2p/H1);
+dgamma= ((kpg)*((c2p + c2pp + c3)/H1))*(1-gamma)/(km + ((c2p + c2pp + c3)/H1)) - (kdg*(gamma));
 
 
-%% reaction rates
-
-
-dc0= ((alpha/H1)*dDdt) - (k1*c0*(1-h1));
-dc1= k1*c0*(1-h1) - k2*c1*(1-h2);
-dc2= k2*c1*(1-h2)- kp1*c2;
-dc2p= kp1*c2 - (kp2 + kres)*c2p;
-dc2pp= kp2*c2p - k3*c2pp*(1-h3);
-dcres= kres*c2p;
-dc3= k3*c2pp*(1-h3) - kDc*c3;
-dgamma= (kPg*(c2p + c2pp + c3)*(1-gamma))/(kM + (c2p + c2pp + c3))- (kDg*gamma);
-
-
-dY= [dc0 dc1 dc2 dc2p dc2pp dcres dc3 dgamma]';
+dY= [dc0 dc1 dc2 dc2p dc2pp dc3 dcres dgamma]';
